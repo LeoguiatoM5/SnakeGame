@@ -87,8 +87,14 @@
         border: none;
         margin: 0 5px; /* Espaçamento horizontal entre os botões */
       }
-      @media only screen and (max-width: 600px) {
-      canvas {
+     @media only screen and (max-width: 600px) {
+        
+    #startScreen h1,
+    #startScreen h2 {
+    font-size: 20px; /* Tamanho da fonte menor para dispositivos móveis */
+    /* Outros estilos que você deseja aplicar aos títulos para dispositivos móveis */
+  }
+        canvas {
         width: 100%;
         height: auto;
         max-width: 90vw;
@@ -98,13 +104,22 @@
         margin: 0 auto;
         background-color: black; /* Fundo do jogo */
       }
-      
+      #startScreen h1,
+  #startScreen h2,
+  #startScreen p,
+  #startScreen button,
+  #startScreen i {
+    font-size: 16px; /* Reduzindo o tamanho da fonte */
+    margin: 5px; /* Adicionando um pequeno espaçamento */
+  }
+  #startScreen h1 {
+    font-size: 24px; /* Tamanho do título fixo */
+    /* Outros estilos que você deseja aplicar */
+  }
+  
       .controls {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
-      }
+    margin-top: 10px; /* Reduzindo um pouco o espaçamento superior */
+  }
 
       .arrow-container {
         display: flex;
