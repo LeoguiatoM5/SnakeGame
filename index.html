@@ -87,7 +87,15 @@
         border: none;
         margin: 0 5px; /* Espaçamento horizontal entre os botões */
       }
-     @media only screen and (max-width: 600px) {
+
+
+      #startScreen h1,
+#startScreen h2 {
+  display: block;
+  font-size: 32px; /* Tamanho da fonte maior para desktop */
+  /* Outros estilos que você deseja aplicar aos títulos */
+}
+  @media only screen and (max-width: 600px) {
         
     #startScreen h1,
     #startScreen h2 {
@@ -154,8 +162,8 @@
     <audio id="eatSound" src="./sons/WGQ4BSS-chew-candy-15747 (1).mp3" preload="auto"></audio>
     <audio id="gameOverSound" src="./sons/negative_beeps-6008.mp3" preload="auto"></audio>
     <audio id="backgroundMusic" src="./sons/573_full_cutie-8bit_0152_preview.mp3" preload="auto" loop></audio>
-    
-   <div id="startScreen">
+    <img id="appleImg" src="./imagens/pngfind.com-pac-man-png-2902235.png" style="display: none" />
+    <div id="startScreen">
       <h1>Snake Game</h1>
       <h2>Como Jogar:</h2>
      <p>Use as setas do teclado ou os botões na tela para mover a cobra.</p>
@@ -212,9 +220,9 @@
       }
 
       function createFood() {
-        context.fillStyle = "red";
-        context.fillRect(food.x, food.y, box, box);
-      }
+  const appleImg = document.getElementById("appleImg");
+  context.drawImage(appleImg, food.x, food.y, box, box);
+}
 
       function displayRestartButton() {
         const restartBtn = document.getElementById("restartBtn");
