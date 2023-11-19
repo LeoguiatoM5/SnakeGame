@@ -166,9 +166,9 @@
     <div id="startScreen">
       <h1>Snake Game</h1>
       <h2>Como Jogar:</h2>
-     <p>Use as setas do teclado ou os botões na tela para mover a cobra.</p>
-    <p>Coma as frutas vermelhas para crescer e ganhar pontos.</p>
-    <p>Evite colidir com as paredes ou com o próprio corpo da cobra!</p><br>
+      <p>Use as setas do teclado ou os botões na tela para mover a cobra.</p>
+      <p>Coma as frutas vermelhas para crescer e ganhar pontos.</p>
+      <p>Evite colidir com as paredes ou com o próprio corpo da cobra!</p><br>
       <button id="startBtn">Começar Jogo</button><br>
       <p><i>Todos os direitos reservados a Leonardo Guiato ©Copyright</i></p>
     </div>
@@ -188,41 +188,46 @@
     </div>
     
     <script>
-      let canvas = document.getElementById("snake");
-      let context = canvas.getContext("2d");
-      let box = 32;
+ let canvas = document.getElementById("snake");
+    let context = canvas.getContext("2d");
+    let box = 32;
 
-      let snake = [];
-      snake[0] = {
-        x: 8 * box,
-        y: 8 * box,
-      };
+    let snake = [];
+    snake[0] = { x: 8 * box, y: 8 * box };
 
-      let direction = "right";
+    let direction = "right";
+    let food = { x: Math.floor(Math.random() * 15 + 1) * box, y: Math.floor(Math.random() * 15 + 1) * box };
+    let score = 0;
+    let lives = 3; // A
 
-      let food = {
-        x: Math.floor(Math.random() * 15 + 1) * box,
-        y: Math.floor(Math.random() * 15 + 1) * box,
-      };
+    let backgroundImage = new Image();
+    backgroundImage.src = './imagens/891ee9a180d14aa4cb2f71100d7b3a987215d384.jpg'
 
-      let score = 0;
+    // Carregar o fundo antes de iniciar o jogo
+    backgroundImage.onload = function() {
+      showStartScreen();
+    };
+    function createBG() {
+      context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+    }
 
-      function createBG() {
-        context.fillStyle = "black";
-        context.fillRect(0, 0, 16 * box, 16 * box);
-      }
-
-      function createSnake() {
-        for (let i = 0; i < snake.length; i++) {
-          context.fillStyle = i === 0 ? "green" : "lightgreen";
-          context.fillRect(snake[i].x, snake[i].y, box, box);
-        }
-      }
-
-      function createFood() {
-  const appleImg = document.getElementById("appleImg");
-  context.drawImage(appleImg, food.x, food.y, box, box);
+    function createSnake() {
+  for (let i = 0; i < snake.length; i++) {
+    if (i === 0) {
+      context.fillStyle = "darkgreen"; // Cabeça da cobra
+    } else {
+      context.fillStyle = "lightgreen"; // Resto do corpo da cobra
+    }
+    context.beginPath();
+    context.arc(snake[i].x + box / 2, snake[i].y + box / 2, box / 2, 0, 2 * Math.PI);
+    context.fill();
+  }
 }
+
+    function createFood() {
+      const appleImg = document.getElementById("appleImg");
+      context.drawImage(appleImg, food.x, food.y, box, box);
+    }
 
       function displayRestartButton() {
         const restartBtn = document.getElementById("restartBtn");
@@ -261,59 +266,84 @@
       let game;
 
       function startGameLoop() {
-        if (
-          snake[0].x > 15 * box ||
-          snake[0].x < 0 ||
-          snake[0].y > 15 * box ||
-          snake[0].y < 0
-        ) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      createBG();
+
+      let snakeX = snake[0].x;
+      let snakeY = snake[0].y;
+
+      let collision = false;
+      for (let i = 1; i < snake.length; i++) {
+        if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+          collision = true;
+          break;
+        }
+      }
+
+      if (
+        snakeX > 15 * box ||
+        snakeX < 0 ||
+        snakeY > 15 * box ||
+        snakeY < 0 ||
+        collision
+      ) {
+        if (lives > 0) {
+          lives--;
+          snake = [];
+          snake[0] = { x: 8 * box, y: 8 * box };
+        } else {
           clearInterval(game);
           playGameOverSound();
           displayRestartButton();
+          showFinalScore();
           return;
         }
+      }
 
-        for (let i = 1; i < snake.length; i++) {
-          if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+      for (let i = 1; i < snake.length; i++) {
+        if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+          if (lives > 0) {
+            lives--;
+            snake = [];
+            snake[0] = { x: 8 * box, y: 8 * box };
+          } else {
             clearInterval(game);
             playGameOverSound();
             displayRestartButton();
+            showFinalScore();
             return;
           }
         }
-
-        createBG();
-        createSnake();
-        createFood();
-
-        let snakeX = snake[0].x;
-        let snakeY = snake[0].y;
-
-        if (direction === "right") snakeX += box;
-        if (direction === "left") snakeX -= box;
-        if (direction === "up") snakeY -= box;
-        if (direction === "down") snakeY += box;
-
-        if (snakeX !== food.x || snakeY !== food.y) {
-          snake.pop();
-        } else {
-          score += 10;
-          food.x = Math.floor(Math.random() * 15 + 1) * box;
-          food.y = Math.floor(Math.random() * 15 + 1) * box;
-          playEatSound();
-        }
-
-        let newHead = {
-          x: snakeX,
-          y: snakeY,
-        };
-
-        snake.unshift(newHead);
-
-        context.fillStyle = "red";
-        context.font = "20px Arial";
-        context.fillText("Score: " + score, box, box * 1.6);
       }
+
+      createSnake();
+      createFood();
+
+      if (direction === "right") snakeX += box;
+      if (direction === "left") snakeX -= box;
+      if (direction === "up") snakeY -= box;
+      if (direction === "down") snakeY += box;
+
+      if (snakeX !== food.x || snakeY !== food.y) {
+        snake.pop();
+      } else {
+        score += 10;
+        food.x = Math.floor(Math.random() * 15 + 1) * box;
+        food.y = Math.floor(Math.random() * 15 + 1) * box;
+        playEatSound();
+      }
+
+      let newHead = {
+        x: snakeX,
+        y: snakeY,
+      };
+
+      snake.unshift(newHead);
+
+      context.font = "20px Arial";
+      context.fillStyle = "white";
+      context.fillText("Score: " + score, box, box * 1.6);
+    }
 
       // Botão de reinício
       const restartBtn = document.getElementById("restartBtn");
@@ -348,19 +378,40 @@
         gameOverSound.play();
       }
 
+      function showFinalScore() {
+      context.font = "30px Arial";
+      context.fillStyle = "white";
+      context.fillText("Final Score: " + score, box * 5, box * 10); // Mostrar pontuação final
+    }
+
+    function restartGame() {
+    lives = 3; // Reiniciar as vidas
+    score = 0; // Zerar a pontuação
+    snake = [];
+    snake[0] = { x: 8 * box, y: 8 * box };
+    direction = "right";
+    game = setInterval(startGameLoop, 200);
+    const restartBtn = document.getElementById("restartBtn");
+    restartBtn.style.display = "none";
+  }
+
+
+
       // Início do jogo ao clicar no botão "Começar Jogo"
       const backgroundMusic = document.getElementById("backgroundMusic");
       const startScreen = document.getElementById("startScreen");
       const startBtn = document.getElementById("startBtn");
 
       function startGame() {
-        startScreen.style.display = "none"; // Esconder tela inicial
-        canvas.style.display = "block"; // Exibir o canvas do jogo
-        backgroundMusic.play(); // Iniciar música de fundo
-        game = setInterval(startGameLoop, 200); // Iniciar o loop do jogo
-        const controls = document.querySelector(".controls");
-        controls.style.display = "flex";
-      }
+      const startScreen = document.getElementById("startScreen");
+      startScreen.style.display = "none"; // Esconder tela inicial
+      canvas.style.display = "block"; // Exibir o canvas do jogo
+      const backgroundMusic = document.getElementById("backgroundMusic");
+      backgroundMusic.play(); // Iniciar música de fundo
+      game = setInterval(startGameLoop, 200); // Iniciar o loop do jogo
+      const controls = document.querySelector(".controls");
+      controls.style.display = "flex";
+    }
 
       startBtn.addEventListener("click", startGame);
 
