@@ -9,7 +9,7 @@
       body {
       margin: 0;
       padding: 0;
-      background: url("../imagens/snake-game-1680-x-1050-background-6syqer1fr6oahe0b.jpg") no-repeat center center fixed; /* Adicione a imagem como plano de fundo da página */
+      background: url("./imagens/snake-game-1680-x-1050-background-6syqer1fr6oahe0b.jpg") no-repeat center center fixed; /* Adicione a imagem como plano de fundo da página */
       background-size: cover;
       overflow: hidden; /* Para garantir que a imagem de fundo preencha a página inteira */
     }
@@ -176,10 +176,10 @@
   <body>
     <canvas id="snake" width="512" height="512" style="display: none"></canvas>
     <button id="restartBtn" style="display: none">Começar de Novo</button>
-    <audio id="eatSound" src="../sons/WGQ4BSS-chew-candy-15747 (1).mp3" preload="auto"></audio>
-    <audio id="gameOverSound" src="../sons/negative_beeps-6008.mp3" preload="auto"></audio>
-    <audio id="backgroundMusic" src="../sons/573_full_cutie-8bit_0152_preview.mp3" preload="auto" loop></audio>
-    <img id="appleImg" src="../imagens/pngfind.com-pac-man-png-2902235.png" style="display: none" />
+    <audio id="eatSound" src="./sons/WGQ4BSS-chew-candy-15747 (1).mp3" preload="auto"></audio>
+    <audio id="gameOverSound" src="./sons/negative_beeps-6008.mp3" preload="auto"></audio>
+    <audio id="backgroundMusic" src="./sons/573_full_cutie-8bit_0152_preview.mp3" preload="auto" loop></audio>
+    <img id="appleImg" src="./imagens/pngfind.com-pac-man-png-2902235.png" style="display: none" />
     <div id="startScreen">
       <h1>Snake Game</h1>
       <h2>Como Jogar:</h2>
@@ -218,7 +218,7 @@
     let lives = 3; // A
 
     let backgroundImage = new Image();
-    backgroundImage.src = '../imagens/891ee9a180d14aa4cb2f71100d7b3a987215d384.jpg'
+    backgroundImage.src = './imagens/891ee9a180d14aa4cb2f71100d7b3a987215d384.jpg'
 
     // Carregar o fundo antes de iniciar o jogo
     backgroundImage.onload = function() {
